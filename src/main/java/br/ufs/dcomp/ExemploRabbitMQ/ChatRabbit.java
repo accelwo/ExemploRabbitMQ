@@ -5,13 +5,19 @@ import com.rabbitmq.client.*;
 import java.io.IOException;
 
 import java.util.Scanner;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ChatRabbit {
 
   private final static String QUEUE_NAME = "minha-fila";
+  private final static DateFormat sdf = new SimpleDateFormat("'('dd/MM/yyyy 'às' HH:mm:ss') '");
 
   public static void main(String[] argv) throws Exception {
     Scanner entrada = new Scanner(System.in);
+    
+    
     
     
     ConnectionFactory factory = new ConnectionFactory();
@@ -31,18 +37,26 @@ public class ChatRabbit {
       public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body)
           throws IOException {
         String message = new String(body, "UTF-8");
-        System.out.println(" [x] Mensagem recebida: '" + message + "'");
+        //System.out.println(" [x] Mensagem recebida: '" + message + "'");
+        System.out.println(message);
       }
     };
     channel.basicConsume(QUEUE_NAME, true, consumer);
-    for (int i = 0; i < 10; i++){
-        System.out.println("loop "+ i);
-    }
+    for (int i = 0; i <= 5; i++){
+        //System.out.println("loop "+ i);
     
-    System.out.print("Digite sua mensage: ");
+    
+    System.out.print("Digite sua menssage: ");
     String message = entrada.nextLine();
+    Date data = new Date();
+
+    System.out.println("Data  = "+ data);
+    System.out.println("Data2 = "+ sdf.format(data));
+    String texto = sdf.format(data) + QUEUE_NAME + " diz: " + message; 
+    
     //String message = "Olá!!!";
-    channel.basicPublish("", QUEUE_NAME, null, message.getBytes("UTF-8"));
-    System.out.println(" [x] Mensagem enviada: '" + message + "'");
+    channel.basicPublish("", QUEUE_NAME, null, texto.getBytes("UTF-8"));
+    //System.out.println(" [x] Mensagem enviada: '" + message + "'");
+    }
   }
 }
