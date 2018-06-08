@@ -14,7 +14,12 @@ public class Emissor {
     Scanner entrada = new Scanner(System.in);
     
     ConnectionFactory factory = new ConnectionFactory();
-    factory.setUri("amqp://huarumck:VncxT9rNIpuDuLcCkfJqne0JWAlKbA0k@otter.rmq.cloudamqp.com/huarumck");
+    //factory.setUri("amqp://huarumck:VncxT9rNIpuDuLcCkfJqne0JWAlKbA0k@otter.rmq.cloudamqp.com/huarumck");
+    factory.setHost("ec2-34-220-41-87.us-west-2.compute.amazonaws.com");
+    factory.setUsername("accelwo");
+    factory.setPassword("meupass");
+    factory.setVirtualHost("/");
+    
     Connection connection = factory.newConnection();
     Channel channel = connection.createChannel();
 
